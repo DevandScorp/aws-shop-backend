@@ -1,7 +1,6 @@
-import { APIGatewayProxyHandler } from "aws-lambda";
 import { Products } from "../data/products";
 
-export const getProductsList: APIGatewayProxyHandler = async (event, _context) => {
+export const getProductsList = () => {
     return {
         statusCode: 200,
         headers: {
