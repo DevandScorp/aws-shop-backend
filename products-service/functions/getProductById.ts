@@ -2,6 +2,7 @@ import { Client } from "pg";
 import { dbOptions } from "../config";
 
 export const getProductById = async (id: string) => {
+    console.log('Request info: ', id);
     const client = new Client(dbOptions);
     try {
         await client.connect();
