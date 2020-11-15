@@ -8,12 +8,14 @@ beforeEach(() => {
   });
 
 test('No name parameter', async () => {
-    const importProductsFileResponse = await importProductsFile({}, null, null);
+    const importProductsFileHandler = importProductsFile(null);
+    const importProductsFileResponse = await importProductsFileHandler({}, null, null);
     expect(importProductsFileResponse.body).toBe(JSON.stringify({ message: 'You haven\'t passed name parameter' }));
 });
 
 test('Wrong file name extension', async () => {
-    const importProductsFileResponse = await importProductsFile({ queryStringParameters: { name: 'test.pdf' }}, null, null);
+    const importProductsFileHandler = importProductsFile(null);
+    const importProductsFileResponse = await importProductsFileHandler({ queryStringParameters: { name: 'test.pdf' }}, null, null);
     expect(importProductsFileResponse.body).toBe(JSON.stringify({ message: 'Your file should be in csv format' }));
 });
 
@@ -22,18 +24,10 @@ test('Valid data with response', async () => {
     AWSMock.mock('S3','getSignedUrl', (operation,params,callback) => {
         return callback(null, 'https://example.com');
       });
-      const importProductsFileResponse = await importProductsFile({ queryStringParameters: { name: 'test.csv' }}, null, null);
-    // const bucket = new AWS.S3({ region: 'eu-west-1' })
-    // const url = await new Promise((resolve, reject) => {
-    //     bucket.getSignedUrl('putObject', {}, (err, url) => {
-    //         if (err) {
-    //             reject(err)
-    //         }
-    //         resolve(url)
-    //     })
-    // });
-    console.log(importProductsFileResponse);
-    expect('https://example.com').toBe('https://example.com');
+    const bucket = new AWS.S3({ region: 'eu-west-1' })
+    const importProductsFileHandler = importProductsFile(bucket);
+    const importProductsFileResponse = await importProductsFileHandler({ queryStringParameters: { name: 'test.csv' }}, null, null);
+    expect(importProductsFileResponse.body).toBe('https://example.com');
  
     AWSMock.restore('S3');
 })

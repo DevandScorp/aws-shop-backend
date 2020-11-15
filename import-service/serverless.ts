@@ -41,7 +41,7 @@ const serverlessConfiguration: Serverless = {
   },
   functions: {
     importProductsFile: {
-      handler: 'handler.importProductsFile',
+      handler: 'handler.importProductsFileHandler',
       events: [
         {
           http: {
@@ -59,7 +59,7 @@ const serverlessConfiguration: Serverless = {
       ]
     },
     importFileParser: {
-      handler: 'handler.importFileParser',
+      handler: 'handler.importFileParserHandler',
       events: [{
         s3: {
           bucket: 'rs-app-task-5-bucket',
