@@ -25,6 +25,13 @@ const serverlessConfiguration: Serverless = {
     environment: {
       AWS_NODEJS_CONNECTION_REUSE_ENABLED: '1',
     },
+    iamRoleStatements:[
+      {
+        Effect: 'Allow',
+        Action: 'sqs:*',
+        Resource: "${cf:import-service-${self:provider.stage}.SQSQueueArn}"
+      }
+    ],
     stage: 'dev',
     region: 'eu-west-1'
   },
@@ -69,6 +76,15 @@ const serverlessConfiguration: Serverless = {
           }
         }
       ]
+    },
+    catalogBatchProcess: {
+      handler: 'handler.catalogBatchProcessHandler',
+      events: [{
+        sqs: {
+          batchSize: 5,
+          arn: "${cf:import-service-${self:provider.stage}.SQSQueueArn}"
+        }
+      }]
     }
   }
 }

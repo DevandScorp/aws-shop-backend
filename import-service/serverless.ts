@@ -15,6 +15,23 @@ const serverlessConfiguration: Serverless = {
     }
   },
   // Add the serverless-webpack plugin
+  resources: {
+    Outputs: {
+      SQSQueueArn: {
+        Value: {
+          'Fn::GetAtt': ['SQSQueue', 'Arn']
+        }
+      }
+    },
+    Resources: {
+      SQSQueue: {
+        Type: 'AWS::SQS::Queue',
+        Properties: {
+          QueueName: 'catalogItemsQueue'
+        }
+      }
+    }
+  },
   plugins: ['serverless-webpack'],
   provider: {
     name: 'aws',
@@ -24,7 +41,10 @@ const serverlessConfiguration: Serverless = {
     },
     environment: {
       AWS_NODEJS_CONNECTION_REUSE_ENABLED: '1',
-      BUCKET_NAME: 'rs-app-task-5-bucket'
+      BUCKET_NAME: 'rs-app-task-5-bucket',
+      SQS_URL: {
+        Ref: 'SQSQueue'
+      }
     },
     iamRoleStatements: [
       {
