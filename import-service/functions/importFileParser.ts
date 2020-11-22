@@ -1,5 +1,6 @@
 import { S3Handler } from "aws-lambda";
 import { corsWrapper } from "../utils";
+import { sqs } from '../sqs';
 import csv from 'csv-parser';
 
 export const importFileParser = (bucket): S3Handler => {
@@ -13,7 +14,13 @@ export const importFileParser = (bucket): S3Handler => {
                 const s3Stream = bucket.getObject(params).createReadStream();
                 await new Promise((resolve, reject) => {
                     s3Stream.pipe(csv())
-                        .on('data', (data) => console.log(data))
+                        .on('data', async (data) => {
+                            await sqs.sendMessage({
+                                QueueUrl: process.env.SQS_URL,
+                                MessageBody: JSON.stringify(data)
+                            }).promise();
+                            console.log(data);
+                        })
                         .on('error', (error) => reject(error))
                         .on('end', () => {
                             resolve();

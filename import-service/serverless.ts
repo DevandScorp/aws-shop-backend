@@ -51,10 +51,18 @@ const serverlessConfiguration: Serverless = {
         Effect: 'Allow',
         Action: 's3:ListBucket',
         Resource: 'arn:aws:s3:::rs-app-task-5-bucket'
-      }, {
+      },
+      {
         Effect: 'Allow',
         Action: 's3:*',
         Resource: 'arn:aws:s3:::rs-app-task-5-bucket/*'
+      },
+      {
+        Effect: 'Allow',
+        Action: 'sqs:*',
+        Resource: {
+          'Fn::GetAtt': ['SQSQueue', 'Arn']
+        }
       }],
     region: 'eu-west-1',
     stage: 'dev'

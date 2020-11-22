@@ -9,4 +9,4 @@ jspm_packages
 .webpack
 
 .vscode
-package-lock
+package-lock.json

@@ -14,6 +14,43 @@ const serverlessConfiguration: Serverless = {
       includeModules: true
     }
   },
+  resources: {
+    Resources: {
+      SNSTopic: {
+        Type: 'AWS::SNS::Topic',
+        Properties: {
+          TopicName: 'createProductTopic' 
+        }
+      },
+      SNSSubscription: {
+        Type: 'AWS::SNS::Subscription',
+        Properties: {
+          Endpoint: 'artemda4@gmail.com',
+          Protocol: 'email',
+          TopicArn: {
+            Ref: 'SNSTopic'
+          },
+          FilterPolicy: {
+            Type: ['Expensive']
+          }
+        }
+      },
+      SNSSubscriptionSecond: {
+        Type: 'AWS::SNS::Subscription',
+        Properties: {
+          Endpoint: 'artemda459@gmail.com',
+          Protocol: 'email',
+          TopicArn: {
+            Ref: 'SNSTopic'
+          },
+          FilterPolicy: {
+            Type: ['Cheap']
+          }
+        }
+      }
+    }
+    
+  },
   // Add the serverless-webpack plugin
   plugins: ['serverless-webpack'],
   provider: {
@@ -24,12 +61,22 @@ const serverlessConfiguration: Serverless = {
     },
     environment: {
       AWS_NODEJS_CONNECTION_REUSE_ENABLED: '1',
+      SNS_ARN: {
+        Ref: 'SNSTopic'
+      }
     },
     iamRoleStatements:[
       {
         Effect: 'Allow',
         Action: 'sqs:*',
         Resource: "${cf:import-service-${self:provider.stage}.SQSQueueArn}"
+      },
+      {
+        Effect: 'Allow',
+        Action: 'sns:*',
+        Resource: {
+          Ref: 'SNSTopic'
+        }
       }
     ],
     stage: 'dev',
