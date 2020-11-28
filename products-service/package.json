@@ -7,13 +7,15 @@
     "test": "jest"
   },
   "dependencies": {
-    "@babel/preset-typescript": "^7.12.1",
-    "@types/jest": "^26.0.15",
-    "@types/pg": "^7.14.6",
+    "aws-sdk": "^2.797.0",
+    "aws-sdk-mock": "^5.1.0",
     "pg": "^8.4.2",
     "source-map-support": "^0.5.10"
   },
   "devDependencies": {
+    "@babel/preset-typescript": "^7.12.1",
+    "@types/jest": "^26.0.15",
+    "@types/pg": "^7.14.6",
     "@babel/core": "^7.12.3",
     "@babel/preset-env": "^7.12.1",
     "@types/aws-lambda": "^8.10.17",
