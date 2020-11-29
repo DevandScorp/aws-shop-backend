@@ -20,6 +20,6 @@ export const basicAuthorizer: APIGatewayTokenAuthorizerHandler = async (event, _
         const policy = generatePolicy(encodedCredentials, event.methodArn, effect);
         return policy;
     } catch(err) {
-        callback(`Unauthorized: ${err.message}`);
+        callback('Unauthorized');
     }
   }

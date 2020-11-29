@@ -29,6 +29,19 @@ const serverlessConfiguration: Serverless = {
         Properties: {
           QueueName: 'catalogItemsQueue'
         }
+      },
+      GatewayResponseDefault400: {
+        Type: 'AWS::ApiGateway::GatewayResponse',
+        Properties: {
+          ResponseParameters: {
+            'gatewayresponse.header.Access-Control-Allow-Origin': "'*'",
+            'gatewayresponse.header.Access-Control-Allow-Headers': "'*'",
+          },
+          ResponseType: 'DEFAULT_4XX',
+          RestApiId: {
+            Ref: 'ApiGatewayRestApi',
+          },
+        },
       }
     }
   },
@@ -75,6 +88,7 @@ const serverlessConfiguration: Serverless = {
           http: {
             method: 'get',
             path: 'import',
+            cors: true,
             request: {
               parameters: {
                 querystrings: {
