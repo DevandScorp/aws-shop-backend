@@ -2,7 +2,6 @@ import { APIGatewayTokenAuthorizerHandler } from "aws-lambda";
 import { generatePolicy } from "../utils";
 
 export const basicAuthorizer: APIGatewayTokenAuthorizerHandler = async (event, _context, callback) => {
-    console.log('Hello');
     console.log('Event: ', JSON.stringify(event));
 
     if (event['type'] != 'TOKEN') callback('Unauthorized');
